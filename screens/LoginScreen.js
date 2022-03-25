@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, AsyncStorage } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import Amplify from "@aws-amplify/core";
 import { Authenticator } from "aws-amplify-react-native";
@@ -8,6 +8,7 @@ import AmplifyTheme from "../components/AmplifyTheme";
 import { PermissionsAndroid } from "react-native";
 import BackgroundJob from "react-native-background-job";
 import SmsListener from "react-native-android-sms-listener";
+import Auth from "@aws-amplify/auth";
 
 Amplify.configure({
   ...awsmobile,
@@ -75,6 +76,24 @@ const LoginScreen = ({ navigation }) => {
     setPermissionStatus(permission);
     console.log("permissionStatus", permissionStatus);
   };
+
+  useEffect(() => {
+    if (signInState === "signedIn") {
+      const getUserDetails = async () => {
+        const user = await Auth.currentAuthenticatedUser();
+
+        try {
+          await AsyncStorage.setItem("userDetails", {
+            userPoolId: user.attributes.sub,
+            email: user.attributes.email,
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      getUserDetails();
+    }
+  }, [signInState]);
 
   useEffect(() => {
     if (signInState === "signedUp" && !permissionStatus) {
