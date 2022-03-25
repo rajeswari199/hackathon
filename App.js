@@ -9,6 +9,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './screens/HomeScreen'
 import LoginScreen from './screens/LoginScreen';
 import AllTransactions from './screens/AllTransactions'
+import ReportsScreen from './screens/ReportsScreen'
 
 import { COLORS } from './assets/constants';
 
@@ -26,6 +27,9 @@ export default function App() {
     <NavigationContainer>
       <StatusBar style='dark' />
       <Stack.Navigator screenOptions={globalScreenOptions}>
+        {/* Reports */}
+        <Stack.Screen name='Reports' component={ReportsScreen} />
+        
         {/* HOME */}
         <Stack.Screen name='Home' component={HomeScreen} />
 

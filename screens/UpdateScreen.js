@@ -20,21 +20,21 @@ const UpdateScreen = ({ route, navigation }) => {
   const [input, setInput] = useState('')
   const [amount, setAmount] = useState('')
   const [submitLoading, setSubmitLoading] = useState(false)
-  useEffect(() => {
-    const unsubscribe = db
-      .collection('expense')
-      .doc(itemId)
-      .onSnapshot(
-        (snapshot) =>
-          setInput(snapshot.data()?.text) &
-          setAmount(snapshot.data()?.price) &
-          setSelDate(
-            parse(snapshot.data()?.userDate, 'dd/MM/yyyy', new Date())
-          ) &
-          setSelectedLanguage(snapshot.data()?.type)
-      )
-    return unsubscribe
-  }, [])
+  // useEffect(() => {
+  //   const unsubscribe = db
+  //     .collection('expense')
+  //     .doc(itemId)
+  //     .onSnapshot(
+  //       (snapshot) =>
+  //         setInput(snapshot.data()?.text) &
+  //         setAmount(snapshot.data()?.price) &
+  //         setSelDate(
+  //           parse(snapshot.data()?.userDate, 'dd/MM/yyyy', new Date())
+  //         ) &
+  //         setSelectedLanguage(snapshot.data()?.type)
+  //     )
+  //   return unsubscribe
+  // }, [])
 
   const updateExpense = () => {
     if (input && amount && selDate && selectedLanguage) {
