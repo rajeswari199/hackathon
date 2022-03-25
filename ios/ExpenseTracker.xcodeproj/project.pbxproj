@@ -15,6 +15,7 @@
 		96905EF65AED1B983A6B3ABC /* libPods-ExpenseTracker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-ExpenseTracker.a */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		6D4CE37A09444487B9D35456 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 050EFC8F76C24D69B6FD969B /* noop-file.swift */; };
+		C8F315115BC64431ADE46E3B /* libRNBackgroundJob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E1932E95B848404F84193951 /* libRNBackgroundJob.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,8 @@
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		050EFC8F76C24D69B6FD969B /* noop-file.swift */ = {isa = PBXFileReference; name = "noop-file.swift"; path = "ExpenseTracker/noop-file.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
 		4C703C4F28E3408B9C925BED /* ExpenseTracker-Bridging-Header.h */ = {isa = PBXFileReference; name = "ExpenseTracker-Bridging-Header.h"; path = "ExpenseTracker/ExpenseTracker-Bridging-Header.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		28DF1A9221494D4598060543 /* RNBackgroundJob.xcodeproj */ = {isa = PBXFileReference; name = "RNBackgroundJob.xcodeproj"; path = "../node_modules/react-native-background-job/ios/RNBackgroundJob.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		E1932E95B848404F84193951 /* libRNBackgroundJob.a */ = {isa = PBXFileReference; name = "libRNBackgroundJob.a"; path = "libRNBackgroundJob.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +46,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				96905EF65AED1B983A6B3ABC /* libPods-ExpenseTracker.a in Frameworks */,
+				C8F315115BC64431ADE46E3B /* libRNBackgroundJob.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +84,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				28DF1A9221494D4598060543 /* RNBackgroundJob.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -325,6 +330,14 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				SWIFT_OBJC_BRIDGING_HEADER = ExpenseTracker/ExpenseTracker-Bridging-Header.h;
 				CODE_SIGN_ENTITLEMENTS = "ExpenseTracker/ExpenseTracker.entitlements";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/ExpenseTracker\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-background-job/ios",
+				);
 			};
 			name = Debug;
 		};
@@ -351,6 +364,14 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				SWIFT_OBJC_BRIDGING_HEADER = ExpenseTracker/ExpenseTracker-Bridging-Header.h;
 				CODE_SIGN_ENTITLEMENTS = "ExpenseTracker/ExpenseTracker.entitlements";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/ExpenseTracker\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-background-job/ios",
+				);
 			};
 			name = Release;
 		};
