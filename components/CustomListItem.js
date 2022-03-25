@@ -1,10 +1,10 @@
-import React, {useState} from 'react'
-import {StyleSheet, View} from 'react-native'
-import {ListItem, Text, Divider} from 'react-native-elements'
-import {MaterialIcons} from '@expo/vector-icons'
+import React, { useState } from 'react'
+import { StyleSheet, View } from 'react-native'
+import { ListItem, Text, Divider } from 'react-native-elements'
+import { MaterialIcons } from '@expo/vector-icons'
 import ModalActions from './ModalActions'
 
-const CustomListItem = ({info, navigation, id}) => {
+const CustomListItem = ({ info, navigation, id }) => {
   const [modalVisible, setModalVisible] = useState(false)
 
   return (
@@ -22,7 +22,7 @@ const CustomListItem = ({info, navigation, id}) => {
           )}
           <ListItem.Content>
             <ListItem.Title
-              style={{fontWeight: 'bold', textTransform: 'capitalize'}}
+              style={{ fontWeight: 'bold', textTransform: 'capitalize' }}
             >
               {info?.text}
             </ListItem.Title>
@@ -43,7 +43,7 @@ const CustomListItem = ({info, navigation, id}) => {
             )}
           </View>
         </ListItem>
-        <Divider style={{backgroundColor: 'lightgrey'}} />
+        <Divider style={{ backgroundColor: 'lightgrey' }} />
       </View>
       <ModalActions
         modalVisible={modalVisible}
