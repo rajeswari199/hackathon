@@ -4,14 +4,11 @@ import { Input, Button, Image, Text } from "react-native-elements";
 import { StatusBar } from "expo-status-bar";
 import Amplify from '@aws-amplify/core';
 import {Authenticator} from 'aws-amplify-react-native';
-import awsconfig from '../aws-exports';
+import awsmobile from '../src/aws-exports';
 import AmplifyTheme from '../components/AmplifyTheme'
 
 Amplify.configure({
-  Auth: {
-    mandatorySignIn: true,
-    region: "us-east-1",
-  },
+  ...awsmobile,
   Analytics: {
     disabled: true,
   },
@@ -43,7 +40,7 @@ const LoginScreen = ({ navigation }) => {
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <Authenticator usernameAttributes="email" signUpConfig={signUpConfig} theme={AmplifyTheme} />
+      <Authenticator onStateChange={(authState) => {if(authState === 'signedIn') navigation.navigate('Home') }} usernameAttributes="email" signUpConfig={signUpConfig} theme={AmplifyTheme} />
     </>
   )
 
