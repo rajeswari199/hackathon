@@ -1,14 +1,14 @@
-import {StatusBar} from 'expo-status-bar'
-import React, {useLayoutEffect, useState} from 'react'
-import {StyleSheet, View, KeyboardAvoidingView, TextInput} from 'react-native'
-import {Text, Button} from 'react-native-elements'
+import { StatusBar } from 'expo-status-bar'
+import React, { useLayoutEffect, useState } from 'react'
+import { StyleSheet, View, KeyboardAvoidingView, TextInput } from 'react-native'
+import { Text, Button } from 'react-native-elements'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import format from 'date-fns/format'
-import {Picker} from '@react-native-picker/picker'
-import {db, auth} from '../firebase'
-import firebase from 'firebase'
+import { Picker } from '@react-native-picker/picker'
+// import { db, auth } from '../firebase'
+// import firebase from 'firebase'
 
-const AddScreen = ({navigation}) => {
+const AddScreen = ({ navigation }) => {
   const [submitLoading, setSubmitLoading] = useState(false)
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -20,18 +20,18 @@ const AddScreen = ({navigation}) => {
   const createExpense = () => {
     if (input && amount && selDate && selectedLanguage && auth) {
       setSubmitLoading(true)
-      db.collection('expense')
-        .add({
-          email: auth.currentUser.email,
-          text: input,
-          price: amount,
-          date: selDate,
-          type: selectedLanguage,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          userDate: result,
-        })
-        .then(() => clearInputFields())
-        .catch((error) => alert(error.message))
+      // db.collection('expense')
+      //   .add({
+      //     email: auth.currentUser.email,
+      //     text: input,
+      //     price: amount,
+      //     date: selDate,
+      //     type: selectedLanguage,
+      //     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      //     userDate: result,
+      //   })
+      //   .then(() => clearInputFields())
+      //   .catch((error) => alert(error.message))
     } else {
       alert('All fields are mandatory')
       setSubmitLoading(false)
@@ -103,7 +103,7 @@ const AddScreen = ({navigation}) => {
           placeholder='Select Date'
           value={result}
           onPress={showDatepicker}
-          // editable={false}
+        // editable={false}
         >
           {result ? result : new Date()}
         </Text>

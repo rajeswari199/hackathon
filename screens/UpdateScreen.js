@@ -1,17 +1,17 @@
-import {StatusBar} from 'expo-status-bar'
-import React, {useEffect, useLayoutEffect, useState} from 'react'
-import {StyleSheet, View, KeyboardAvoidingView, TextInput} from 'react-native'
-import {Text, Button} from 'react-native-elements'
+import { StatusBar } from 'expo-status-bar'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
+import { StyleSheet, View, KeyboardAvoidingView, TextInput } from 'react-native'
+import { Text, Button } from 'react-native-elements'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import format from 'date-fns/format'
-import {Picker} from '@react-native-picker/picker'
-import {db} from '../firebase'
-import firebase from 'firebase'
+import { Picker } from '@react-native-picker/picker'
+// import {db} from '../firebase'
+// import firebase from 'firebase'
 import parse from 'date-fns/parse'
 
-const UpdateScreen = ({route, navigation}) => {
+const UpdateScreen = ({ route, navigation }) => {
   const [transactions, setTransactions] = useState([])
-  const {itemId} = route.params
+  const { itemId } = route.params
   useLayoutEffect(() => {
     navigation.setOptions({
       title: 'Update Expense',
@@ -39,18 +39,18 @@ const UpdateScreen = ({route, navigation}) => {
   const updateExpense = () => {
     if (input && amount && selDate && selectedLanguage) {
       setSubmitLoading(true)
-      db.collection('expense')
-        .doc(itemId)
-        .update({
-          text: input,
-          price: amount,
-          date: selDate,
-          type: selectedLanguage,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          userDate: result,
-        })
-        .then(() => clearInputFields())
-        .catch((error) => alert(error.message))
+      // db.collection('expense')
+      //   .doc(itemId)
+      //   .update({
+      //     text: input,
+      //     price: amount,
+      //     date: selDate,
+      //     type: selectedLanguage,
+      //     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      //     userDate: result,
+      //   })
+      //   .then(() => clearInputFields())
+      //   .catch((error) => alert(error.message))
     } else {
       setSubmitLoading(false)
       alert('All fields are mandatory')

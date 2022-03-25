@@ -1,43 +1,23 @@
-import React, {useEffect, useLayoutEffect, useState} from 'react'
-import {ScrollView, StyleSheet, View} from 'react-native'
-import {SafeAreaView} from 'react-native-safe-area-context'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
+import { ScrollView, StyleSheet, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomListItem from '../components/CustomListItem'
-import {db, auth} from '../firebase'
-import {Text} from 'react-native-elements'
-import {FontAwesome5} from '@expo/vector-icons'
+import { Text } from 'react-native-elements'
+import { FontAwesome5 } from '@expo/vector-icons'
 
-const AllTransactions = ({navigation}) => {
+import { COLORS } from '../assets/constants'
+
+const AllTransactions = ({ navigation }) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       title: 'All Transactions',
     })
   }, [])
-  const [transactions, setTransactions] = useState([])
-  useEffect(() => {
-    const unsubscribe = db
-      .collection('expense')
-      .orderBy('timestamp', 'desc')
-      .onSnapshot((snapshot) =>
-        setTransactions(
-          snapshot.docs.map((doc) => ({
-            id: doc.id,
-            data: doc.data(),
-          }))
-        )
-      )
 
-    return unsubscribe
-  }, [])
+  const [transactions, setTransactions] = useState([])
+
   const [filter, setFilter] = useState([])
-  useEffect(() => {
-    if (transactions) {
-      setFilter(
-        transactions.filter(
-          (transaction) => transaction.data.email === auth.currentUser.email
-        )
-      )
-    }
-  }, [transactions])
+
   return (
     <>
       {filter?.length > 0 ? (
@@ -56,8 +36,8 @@ const AllTransactions = ({navigation}) => {
         </SafeAreaView>
       ) : (
         <View style={styles.containerNull}>
-          <FontAwesome5 name='list-alt' size={24} color='#EF8A76' />
-          <Text h4 style={{color: '#4A2D5D'}}>
+          <FontAwesome5 name='list-alt' size={24} color={COLORS.mainColor} />
+          <Text h4 style={{ color: COLORS.secondaryColor }}>
             No Transactions
           </Text>
         </View>
@@ -70,13 +50,13 @@ export default AllTransactions
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.primaryColor,
     padding: 0,
     marginTop: -23,
   },
   containerNull: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: COLORS.primaryColor,
     alignItems: 'center',
     justifyContent: 'center',
   },

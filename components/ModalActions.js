@@ -8,16 +8,16 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native'
-import {FontAwesome, EvilIcons, FontAwesome5} from '@expo/vector-icons'
-import {db} from '../firebase'
+import { FontAwesome, EvilIcons, FontAwesome5 } from '@expo/vector-icons'
+// import {db} from '../firebase'
 
-const ModalActions = ({modalVisible, setModalVisible, navigation, id}) => {
+const ModalActions = ({ modalVisible, setModalVisible, navigation, id }) => {
   const deleteExpense = () => {
-    db.collection('expense')
-      .doc(id)
-      .delete()
-      .then(() => alert('Deleted Successfully'))
-      .catch((error) => alert(error.message))
+    // db.collection('expense')
+    //   .doc(id)
+    //   .delete()
+    //   .then(() => alert('Deleted Successfully'))
+    //   .catch((error) => alert(error.message))
   }
   return (
     <View style={styles.centeredView}>
