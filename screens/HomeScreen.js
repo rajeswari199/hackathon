@@ -2,10 +2,13 @@ import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { View, TouchableOpacity } from 'react-native'
 import { Text, Image } from 'react-native-elements'
 import { StatusBar } from 'expo-status-bar'
-import { AntDesign, Feather, FontAwesome5, MaterialIcons } from '@expo/vector-icons'
+import { Feather, FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 
 import CustomListItem from '../components/CustomListItem'
+import Footer from './Footer'
+
 import { COLORS } from '../assets/constants'
+import { ROUTES } from '../utils/constants'
 
 import styles from './HomeScreenStyles'
 
@@ -39,6 +42,7 @@ const HomeScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       ),
+      headerLeft: () => null
     })
   }, [navigation])
 
@@ -115,6 +119,7 @@ const HomeScreen = ({ navigation }) => {
     <>
       <View style={styles.container}>
         <StatusBar style='dark' />
+
         <View style={styles.fullName}>
           <View style={{ marginLeft: 10 }}>
             <Text style={{ fontWeight: 'bold' }}>Welcome</Text>
@@ -123,6 +128,7 @@ const HomeScreen = ({ navigation }) => {
             </Text>
           </View>
         </View>
+
         <View style={styles.card}>
           <View style={styles.cardTop}>
             <Text style={{ textAlign: 'center', color: COLORS.primaryColor }}>
@@ -169,7 +175,7 @@ const HomeScreen = ({ navigation }) => {
           </Text>
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() => navigation.navigate('All')}
+            onPress={() => navigation.navigate(ROUTES.allTransactions)}
           >
             <Text style={styles.seeAll}>See All</Text>
           </TouchableOpacity>
@@ -197,15 +203,7 @@ const HomeScreen = ({ navigation }) => {
         )}
       </View>
 
-      <View style={styles.addButton}>
-        <TouchableOpacity
-          style={styles.plusButton}
-          onPress={() => navigation.navigate('Add')}
-          activeOpacity={0.5}
-        >
-          <AntDesign name='plus' size={24} color={COLORS.primaryColor} />
-        </TouchableOpacity>
-      </View>
+      <Footer navigation={navigation} />
     </>
   )
 }

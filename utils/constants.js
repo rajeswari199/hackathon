@@ -14,3 +14,10 @@ export const categoriesList = [
   { key: 'Rental', name: 'Rental', icon: 'house' },
   { key: 'Others', name: 'Others', icon: otherIcon },
 ]
+
+export const ROUTES = {
+  login: 'Login',
+  home: 'Home',
+  allTransactions: 'All',
+  reports: 'Reports',
+}

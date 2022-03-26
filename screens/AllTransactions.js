@@ -14,7 +14,7 @@ const AllTransactions = ({ navigation }) => {
     })
   }, [])
 
-  const [transactions, setTransactions] = useState([
+  const mock = [
     {
       "id": 1,
       "transactionMadeOn": "2022-03-24",
@@ -37,35 +37,33 @@ const AllTransactions = ({ navigation }) => {
       "description": null,
       "transactionMode": "Debit Card"
     }
-  ])
+  ]
 
-
+  const [transactions, setTransactions] = useState(mock)
 
   return (
-    <>
-      {transactions?.length > 0 ? (
-        <SafeAreaView style={styles.container}>
-          <ScrollView>
-            {transactions?.map((info) => (
-              <View key={info.id}>
-                <CustomListItem
-                  info={info}
-                  navigation={navigation}
-                  id={info.id}
-                />
-              </View>
-            ))}
-          </ScrollView>
-        </SafeAreaView>
-      ) : (
-        <View style={styles.containerNull}>
-          <FontAwesome5 name='list-alt' size={24} color={COLORS.mainColor} />
-          <Text h4 style={{ color: COLORS.secondaryColor }}>
-            No Transactions
-          </Text>
-        </View>
-      )}
-    </>
+    transactions?.length > 0 ? (
+      <SafeAreaView style={styles.container}>
+        <ScrollView>
+          {transactions?.map((info) => (
+            <View key={info.id}>
+              <CustomListItem
+                info={info}
+                navigation={navigation}
+                id={info.id}
+              />
+            </View>
+          ))}
+        </ScrollView>
+      </SafeAreaView>
+    ) : (
+      <View style={styles.containerNull}>
+        <FontAwesome5 name='list-alt' size={24} color={COLORS.mainColor} />
+        <Text h4 style={{ color: COLORS.secondaryColor }}>
+          No Transactions
+        </Text>
+      </View>
+    )
   )
 }
 
@@ -75,11 +73,10 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.primaryColor,
     padding: 0,
-    marginTop: -23,
+    flex: 1,
   },
   containerNull: {
     flex: 1,
-    backgroundColor: COLORS.primaryColor,
     alignItems: 'center',
     justifyContent: 'center',
   },

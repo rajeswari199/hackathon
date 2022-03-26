@@ -12,6 +12,7 @@ import AllTransactions from './screens/AllTransactions'
 import ReportsScreen from './screens/ReportsScreen'
 
 import { COLORS } from './assets/constants';
+import { ROUTES } from './utils/constants';
 
 const Stack = createStackNavigator();
 
@@ -23,21 +24,22 @@ export default function App() {
     },
     headerTintColor: COLORS.secondaryColor,
   };
+
   return (
     <NavigationContainer>
       <StatusBar style='dark' />
       <Stack.Navigator screenOptions={globalScreenOptions}>
-        {/* Reports */}
-        <Stack.Screen name='Reports' component={ReportsScreen} />
         {/* LOGIN */}
-        <Stack.Screen name='Login' component={LoginScreen} />
-        
-        {/* HOME */}
-        <Stack.Screen name='Home' component={HomeScreen} />
+        <Stack.Screen name={ROUTES.login} component={LoginScreen} />
 
+        {/* HOME */}
+        <Stack.Screen name={ROUTES.home} component={HomeScreen} />
 
         {/* ALL TRANSACTIONS */}
-        <Stack.Screen name='All' component={AllTransactions} />
+        <Stack.Screen name={ROUTES.allTransactions} component={AllTransactions} />
+
+        {/* REPORTS */}
+        <Stack.Screen name={ROUTES.reports} component={ReportsScreen} />
       </Stack.Navigator >
     </NavigationContainer >
   );

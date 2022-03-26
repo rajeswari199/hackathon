@@ -22,10 +22,7 @@ const CustomListItem = ({ info, navigation }) => {
     <>
       <View>
         <ListItem
-          onPress={() => {
-            console.log('pressed')
-            setModalVisible(true)
-          }}
+          onPress={() => setModalVisible(true)}
         >
           <View style={styles.left}>
             <MaterialIcons
@@ -54,7 +51,7 @@ const CustomListItem = ({ info, navigation }) => {
           </View>
         </ListItem>
 
-        <Divider style={{ backgroundColor: 'lightgrey' }} />
+        <Divider style={{ backgroundColor: COLORS.lightgrey }} />
       </View >
 
       <ModalActions

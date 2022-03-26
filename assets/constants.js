@@ -5,4 +5,5 @@ export const COLORS = {
   secondaryColor: 'black',
   green: 'green',
   red: 'red',
+  lightgrey: 'lightgrey'
 }
