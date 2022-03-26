@@ -1,15 +1,15 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { View, TouchableOpacity } from 'react-native'
-import { Text, Image } from 'react-native-elements'
-import { StatusBar } from 'expo-status-bar'
+import { View, TouchableOpacity, AsyncStorage } from "react-native";
+import { Text, Image } from "react-native-elements";
+import { StatusBar } from "expo-status-bar";
 import {
   AntDesign,
   Feather,
   FontAwesome5,
   MaterialIcons,
 } from "@expo/vector-icons";
-import get from 'lodash/get'
+import {get, startCase} from 'lodash'
 
 import CustomListItem from '../components/CustomListItem'
 import Footer from './Footer'
@@ -39,12 +39,26 @@ const HeaderLogo = () => {
 };
 
 const HomeScreen = ({ navigation }) => {
+const [userDetails, setUserDetails] = useState({})
+
   const dispatch = useDispatch();
   const transactionsDetails = useSelector(selectTransactionDetails)
 
   useEffect(() => {
     dispatch(getTransactionList());
   }, [dispatch]);
+
+  useEffect(() => {
+    const getUserDetails = async () => {
+      try {
+        const user = await AsyncStorage.getItem("userDetails");
+        setUserDetails(JSON.parse(user))
+      } catch (error) {
+        console.error("error here", error);
+      }
+    };
+    getUserDetails();
+  }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -71,7 +85,7 @@ const HomeScreen = ({ navigation }) => {
           <View style={{ marginLeft: 10 }}>
             <Text style={{ fontWeight: "bold" }}>Welcome</Text>
             <Text h4 style={{ color: COLORS.mainColor }}>
-              Ragavi
+              {startCase(get(userDetails, 'email', '').split('@')[0].split('+')[0])}
             </Text>
           </View>
         </View>

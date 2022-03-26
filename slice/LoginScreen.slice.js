@@ -52,14 +52,11 @@ export function sendSmsData(payload) {
     try {
       dispatch(setLoading(true));
       const user = await AsyncStorage.getItem("userDetails");
-      console.log(JSON.parse(user));
-      const data = await ApiService.postApi("/transactions/create", {
+      const { data } = await ApiService.postApi("/transactions/create", {
         message: payload.body,
-        // userId: user.userPoolId,
         userId: JSON.parse(user).userPoolId,
       });
-      console.log(data.data);
-      // dispatch(setTransactionList(data.data.list));
+      console.log(data);
     } catch (err) {
       dispatch(setErrorMessage(err.message || "Something went wrong"));
     } finally {
