@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { StyleSheet, AsyncStorage } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import Amplify from "@aws-amplify/core";
@@ -9,6 +10,13 @@ import { PermissionsAndroid } from "react-native";
 import BackgroundJob from "react-native-background-job";
 import SmsListener from "react-native-android-sms-listener";
 import Auth from "@aws-amplify/auth";
+import {
+  selectTransactionList,
+  sendSmsData,
+  registerUser,
+  setErrorMessage,
+  selectErrorMessage,
+} from "../slice/LoginScreen.slice";
 
 Amplify.configure({
   ...awsmobile,
@@ -66,6 +74,7 @@ const LoginScreen = ({ navigation }) => {
       },
     ],
   };
+  const dispatch = useDispatch();
   const [signInState, setSignInState] = useState("");
   const [permissionStatus, setPermissionStatus] = useState("");
 
@@ -80,15 +89,19 @@ const LoginScreen = ({ navigation }) => {
   useEffect(() => {
     if (signInState === "signedIn") {
       const getUserDetails = async () => {
+        console.log("signedIn registration process");
         const user = await Auth.currentAuthenticatedUser();
-
         try {
-          await AsyncStorage.setItem("userDetails", {
-            userPoolId: user.attributes.sub,
-            email: user.attributes.email,
-          });
+          await AsyncStorage.setItem(
+            "userDetails",
+            JSON.stringify({
+              userPoolId: user.attributes.sub,
+              email: user.attributes.email,
+            })
+          );
+          dispatch(registerUser(() => navigation.navigate("Home")));
         } catch (error) {
-          console.error(error);
+          console.error("error here", error);
         }
       };
       getUserDetails();
@@ -102,7 +115,6 @@ const LoginScreen = ({ navigation }) => {
         await requestReadSmsPermission();
         checkPerm();
       };
-
       fetchData().catch(console.error);
     }
 
@@ -115,6 +127,7 @@ const LoginScreen = ({ navigation }) => {
           console.log("inside registered", subscription, !!subscription);
           if (!subscription) {
             subscription = SmsListener.addListener((event) => {
+              dispatch(sendSmsData(event));
               console.log("message", event);
             });
           }
@@ -141,9 +154,6 @@ const LoginScreen = ({ navigation }) => {
       <Authenticator
         onStateChange={(authState) => {
           console.log("state", authState);
-          if (authState === "signedIn") {
-            navigation.navigate("Home");
-          }
           if (authState) {
             setSignInState(authState);
           }

@@ -4,7 +4,7 @@ export const apiClient = create({
   /**
    * Import the config from the App/Config/index.js file
    */
-  baseURL: 'https://f628-210-18-157-68.ngrok.io/',
+  baseURL: 'http://3c81-210-18-157-68.ngrok.io',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
