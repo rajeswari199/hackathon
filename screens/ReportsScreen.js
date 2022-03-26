@@ -1,123 +1,57 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Text, TouchableOpacity, SafeAreaView, ScrollView, View } from 'react-native'
 import { Text as TextSvg } from 'react-native-svg'
 import { PieChart } from 'react-native-svg-charts'
 import MonthPicker from 'react-native-month-year-picker';
 import moment from 'moment';
 import { ListItem, Divider } from 'react-native-elements'
-import { MaterialIcons } from '@expo/vector-icons'
+import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons'
+import get from 'lodash/get'
 
 import { COLORS } from '../assets/constants';
 
-import styles from './ReportsScreenStyles'
+import styles from './ReportsScreenStyles';
+
+import {
+    selectExpenseList,
+    getExpenseList,
+    setErrorMessage,
+    selectErrorMessage,
+} from "../slice/ReportScreen.slice";
 
 const ReportsScreen = () => {
-  const apiData = [
-    {
-      "id": 1,
-      "categoryName": "Food",
-      "list": [
-        {
-          "id": 1,
-          "transactionMadeOn": "2022-03-24",
-          "transactionAmount": 40,
-          "transactionType": "debit",
-          "categoryName": "Food",
-          "source": "**9746",
-          "currency": "INR",
-          "description": null,
-          "transactionMode": "UPI"
-        }
-      ],
-      "total": "10,000",
-      "percentage": "22.22"
-    },
-    {
-      "id": 2,
-      "categoryName": "Shopping",
-      "list": [],
-      "total": "0.00",
-      "percentage": "0.00"
-    },
-    {
-      "id": 3,
-      "categoryName": "Entertainment",
-      "list": [],
-      "total": "0.00",
-      "percentage": "0.00"
-    },
-    {
-      "id": 4,
-      "categoryName": "Travel",
-      "list": [
-        {
-          "id": 2,
-          "transactionMadeOn": "2022-03-24",
-          "transactionAmount": 100,
-          "transactionType": "debit",
-          "categoryName": "Travel",
-          "source": null,
-          "currency": "INR",
-          "description": null,
-          "transactionMode": "Debit Card"
-        }
-      ],
-      "total": "20,000",
-      "percentage": "55.56"
-    },
-    {
-      "id": 5,
-      "categoryName": "Salary",
-      "list": [],
-      "total": "0.00",
-      "percentage": "0.00"
-    },
-    {
-      "id": 6,
-      "categoryName": "Rental",
-      "list": [],
-      "total": "0.00",
-      "percentage": "0.00"
-    },
-    {
-      "id": 7,
-      "categoryName": "Others",
-      "list": [
-        {
-          "id": 8,
-          "transactionMadeOn": "2022-03-23",
-          "transactionAmount": 40,
-          "transactionType": "debit",
-          "categoryName": "Others",
-          "source": "**8416",
-          "currency": "INR",
-          "description": null,
-          "transactionMode": "UPI"
-        }
-      ],
-      "total": "25000",
-      "percentage": "22.22"
-    }
-  ];
 
-  const data = [];
-
-  apiData.forEach((value, index) => {
-    if (value.list.length !== 0) {
-      data.push({
-        ...value,
-        svg: {
-          fill: COLORS.mainColor,
-          fillOpacity: (1 - (0.1 * index)),
-          onPress: () => console.log('press', index),
-        },
-        key: `pie-${index}`,
-      });
-    }
-  });
+  const dispatch = useDispatch();
+  const expenseList = useSelector(selectExpenseList)
 
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
+  const [filteredList, setFilteredList] = useState([]);
+
+  useEffect(() => {
+    dispatch(getExpenseList({month: moment(date).format('YYYY MM DD')}));    
+  }, [dispatch]);
+
+  useEffect(() => {
+    const data = [];    
+    if (expenseList?.length > 0) {
+      expenseList.forEach((value, index) => {
+        if (get(value, 'list', []).length > 0) {
+          data.push({
+            ...value,
+            svg: {
+              fill: COLORS.mainColor,
+              fillOpacity: (1 - (0.1 * index)),
+              onPress: () => console.log('press', index),
+            },
+            key: `pie-${index}`,
+          });
+        }
+      });
+      setFilteredList(data)
+    }
+  }, [expenseList]);
 
   const showPicker = (value) => setShow(value);
 
@@ -142,7 +76,7 @@ const ReportsScreen = () => {
           stroke={COLORS.primaryColor}
           strokeWidth={0.2}
         >
-          {data.percentage + '%'}
+          {(parseInt(data.percentage)).toFixed(0) + '%'}
         </TextSvg>
       )
     })
@@ -179,6 +113,8 @@ const ReportsScreen = () => {
     )
   }
 
+  console.log('filteredList==', filteredList)
+
   return (
     <SafeAreaView style={styles.container} >
       {/* DATE PICKER */}
@@ -204,39 +140,50 @@ const ReportsScreen = () => {
         />
       )}
 
-      <PieChart
-        style={styles.pieChart}
-        valueAccessor={({ item }) => item.percentage}
-        outerRadius={'70%'}
-        innerRadius={10}
-        data={data}
-        spacing={0}
-      >
-        <Labels />
-      </PieChart>
+      {filteredList.length > 0 ? (
+        <View>
+          <PieChart
+          style={styles.pieChart}
+          valueAccessor={({ item }) => item.percentage}
+          outerRadius={'70%'}
+          innerRadius={10}
+          data={filteredList}
+          spacing={0}
+        >
+          <Labels />
+        </PieChart>
 
-      {/* TOTAL EXPENSE */}
-      {getListItem({
-        key: 'total',
-        label: 'Total',
-        value: `₹ 50000.00`, // TODO - update with api
-        titleStyle: { fontWeight: 'bold' },
-      })}
+        {/* TOTAL EXPENSE */}
+        {getListItem({
+          key: 'total',
+          label: 'Total',
+          value: `₹ 50000.00`, // TODO - update with api
+          titleStyle: { fontWeight: 'bold' },
+        })}
 
-      <ScrollView>
-        {data?.map((dataSet) => (
-          <View key={dataSet.key}>
-            {getListItem({
-              key: dataSet.key,
-              label: dataSet?.categoryName,
-              value: `₹ ${dataSet.total} - ${dataSet.percentage}%`,
-              titleStyle: {},
-            })}
+        <ScrollView>
+          {filteredList?.map((dataSet) => (
+            <View key={dataSet.key}>
+              {getListItem({
+                key: dataSet.key,
+                label: dataSet?.categoryName,
+                value: `₹ ${dataSet.total} - ${dataSet.percentage}%`,
+                titleStyle: {},
+              })}
 
-            <Divider style={{ backgroundColor: COLORS.lightgrey }} />
-          </View>
-        ))}
-      </ScrollView >
+              <Divider style={{ backgroundColor: COLORS.lightgrey }} />
+            </View>
+          ))}
+        </ScrollView >
+        </View> 
+      ): (
+        <View style={styles.containerNull}>
+          <FontAwesome5 name="list-alt" size={24} color={COLORS.mainColor} />
+          <Text h4 style={{ color: COLORS.secondaryColor }}>
+            No Transactions
+          </Text>
+        </View>
+      )}
     </SafeAreaView >
   )
 }
