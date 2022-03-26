@@ -5,41 +5,108 @@ import { PieChart } from 'react-native-svg-charts'
 import MonthPicker from 'react-native-month-year-picker';
 import moment from 'moment';
 
-const ReportsScreen = () => {
-    const data = [
+const ReportsScreen = () => {    
+    const apiData = [
         {
-            key: 1,
-            value: 53,
-            name: 'Education',
-            amount: '10,000',
-            svg: { fill: '#f4982a' },
-            onPress: () => { console.log('pressed')}
+            "id": 1,
+            "categoryName": "Food",
+            "list": [
+                {
+                    "id": 1,
+                    "transactionMadeOn": "2022-03-24",
+                    "transactionAmount": 40,
+                    "transactionType": "debit",
+                    "categoryName": "Food",
+                    "source": "**9746",
+                    "currency": "INR",
+                    "description": null,
+                    "transactionMode": "UPI"
+                }
+            ],
+            "total": "10,000",
+            "percentage": "22.22"
         },
         {
-            key: 2,
-            value: 18,
-            name: 'Beauty & Care',
-            amount: '5,000',
-            svg: { fill: '#F5A442' },
-            onPress: () => { console.log('pressed')}
+            "id": 2,
+            "categoryName": "Shopping",
+            "list": [],
+            "total": "0.00",
+            "percentage": "0.00"
         },
         {
-            key: 3,
-            value: 15,
-            name: 'Child',
-            amount: '12,000',
-            svg: { fill: '#F7AF5A' },
-            onPress: () => { console.log('pressed')}
+            "id": 3,
+            "categoryName": "Entertainment",
+            "list": [],
+            "total": "0.00",
+            "percentage": "0.00"
         },
         {
-            key: 4,
-            value: 12,
-            name: 'Food',
-            amount: '14,000',
-            svg: { fill: '#F8BB73' },
-            onPress: () => { console.log('pressed')}
+            "id": 4,
+            "categoryName": "Travel",
+            "list": [
+                {
+                    "id": 2,
+                    "transactionMadeOn": "2022-03-24",
+                    "transactionAmount": 100,
+                    "transactionType": "debit",
+                    "categoryName": "Travel",
+                    "source": null,
+                    "currency": "INR",
+                    "description": null,
+                    "transactionMode": "Debit Card"
+                }
+            ],
+            "total": "20,000",
+            "percentage": "55.56"
+        },
+        {
+            "id": 5,
+            "categoryName": "Salary",
+            "list": [],
+            "total": "0.00",
+            "percentage": "0.00"
+        },
+        {
+            "id": 6,
+            "categoryName": "Rental",
+            "list": [],
+            "total": "0.00",
+            "percentage": "0.00"
+        },
+        {
+            "id": 7,
+            "categoryName": "Others",
+            "list": [
+                {
+                    "id": 8,
+                    "transactionMadeOn": "2022-03-23",
+                    "transactionAmount": 40,
+                    "transactionType": "debit",
+                    "categoryName": "Others",
+                    "source": "**8416",
+                    "currency": "INR",
+                    "description": null,
+                    "transactionMode": "UPI"
+                }
+            ],
+            "total": "25000",
+            "percentage": "22.22"
         }
     ];
+    const data = [];
+    apiData.forEach((value, index) => {
+        if(value.list.length !== 0 ) {
+            data.push({
+                ...value,
+                svg: {
+                    fill: '#f4982a',
+                    fillOpacity:  (1 - (0.1 * index)),
+                    onPress: () => console.log('press', index),
+                },
+                key: `pie-${index}`,
+            });         
+        }
+    });
     const [date, setDate] = useState(new Date());
     const [show, setShow] = useState(false);
 
@@ -68,7 +135,7 @@ const ReportsScreen = () => {
                     stroke={'black'}
                     strokeWidth={0.2}
                 >
-                    {data.value + '%'}
+                    {data.percentage + '%'}
                 </TextSvg>
             )
         })
@@ -86,13 +153,11 @@ const ReportsScreen = () => {
                 <MonthPicker
                 onChange={onValueChange}
                 value={date}
-                minimumDate={new Date()}
-                maximumDate={new Date(2025, 5)}
                 />
             )}
             <PieChart
                 style={{ height: 500 }}
-                valueAccessor={({ item }) => item.value}
+                valueAccessor={({ item }) => item.percentage}
                 outerRadius={'70%'}
                 innerRadius={10}
                 data={data}
@@ -100,14 +165,14 @@ const ReportsScreen = () => {
             >
                 <Labels/>
             </PieChart>
-            {data.map(dataSet => (
+            {apiData.map(dataSet => (
                 <SafeAreaView key={dataSet.key} style={{
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'space-between'
                 }} >
-                    <Text>{dataSet.name}</Text>
-                    <Text>{`${dataSet.amount} - ${dataSet.value}%`}</Text>
+                    <Text>{dataSet.categoryName}</Text>
+                    <Text>{`${dataSet.total} - ${dataSet.percentage}%`}</Text>
                 </SafeAreaView>                
             ))}
             
