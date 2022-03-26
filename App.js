@@ -6,9 +6,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 // pages
-import HomeScreen from './screens/HomeScreen'
+import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
-import AllTransactions from './screens/AllTransactions'
+import AllTransactions from './screens/AllTransactions';
 
 import { COLORS } from './assets/constants';
 
@@ -26,11 +26,12 @@ export default function App() {
     <NavigationContainer>
       <StatusBar style='dark' />
       <Stack.Navigator screenOptions={globalScreenOptions}>
+        {/* LOGIN */}
+        <Stack.Screen name='Login' component={LoginScreen} />
+        
         {/* HOME */}
         <Stack.Screen name='Home' component={HomeScreen} />
 
-        {/* LOGIN */}
-        <Stack.Screen name='Login' component={LoginScreen} />
 
         {/* ALL TRANSACTIONS */}
         <Stack.Screen name='All' component={AllTransactions} />
