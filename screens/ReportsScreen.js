@@ -107,7 +107,7 @@ const ReportsScreen = () => {
       data.push({
         ...value,
         svg: {
-          fill: '#f4982a',
+          fill: COLORS.mainColor,
           fillOpacity: (1 - (0.1 * index)),
           onPress: () => console.log('press', index),
         },
@@ -201,8 +201,6 @@ const ReportsScreen = () => {
         <MonthPicker
           onChange={onValueChange}
           value={date}
-          minimumDate={new Date()}
-          maximumDate={new Date(2025, 5)}
         />
       )}
 
@@ -230,7 +228,7 @@ const ReportsScreen = () => {
           <View key={dataSet.key}>
             {getListItem({
               key: dataSet.key,
-              label: dataSet?.name,
+              label: dataSet?.categoryName,
               value: `₹ ${dataSet.total} - ${dataSet.percentage}%`,
               titleStyle: {},
             })}
