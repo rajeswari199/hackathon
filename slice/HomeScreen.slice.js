@@ -1,6 +1,7 @@
 import { createSlice, createSelector, createAsyncThunk } from "@reduxjs/toolkit";
 import { ApiService } from "../services/apiService";
 import { API_ROUTES } from "../utils";
+import get from 'lodash/get'
 
 export const HOME_SCREEN_KEY = "homeScreen";
 
@@ -15,8 +16,8 @@ export const homePageSlice = createSlice({
   name: HOME_SCREEN_KEY,
   initialState: initialHomePageState,
   reducers: {
-    setTransactionList: (state, action) => {
-      state.transactionList = action.payload;
+    setTransactionDetails: (state, action) => {
+      state.transactionDetails = action.payload;
     },
     setErrorMessage: (state, action) => {
       state.errorMessage = action.payload;
@@ -31,20 +32,17 @@ export const homePageSlice = createSlice({
 export const homePageReducer = homePageSlice.reducer;
 
 // home page actions
-export const { setErrorMessage, setLoading, setTransactionList } = homePageSlice.actions;
+export const { setErrorMessage, setLoading, setTransactionDetails } = homePageSlice.actions;
 
 /*
 name: getTransactionList
 */
 export function getTransactionList(payload) {
-  console.log("inside slice", payload,);
-
   return async (dispatch) => {
     try {
       dispatch(setLoading(true));
-      const data = await ApiService.getApi("/transactions/6c3a24b3-e795-4ef6-a027-179afc10532d");
-      console.log(data.data)
-      dispatch(setTransactionList(data.data.list));
+      const { data } = await ApiService.getApi("/transactions/6c3a24b3-e795-4ef6-a027-179afc10532d");
+      dispatch(setTransactionDetails(data));
     } catch (err) {
       dispatch(setErrorMessage(err.message || "Something went wrong"));
     } finally {
@@ -70,7 +68,12 @@ export const selectLoading = createSelector(
   (subState) => subState.loading
 );
 
+export const selectTransactionDetails = createSelector(
+  getHomePageState,
+  (subState) => subState.transactionDetails
+);
+
 export const selectTransactionList = createSelector(
   getHomePageState,
-  (subState) => subState.transactionList
+  (subState) => get(subState, 'transactionDetails.list', [])
 );

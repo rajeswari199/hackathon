@@ -9,20 +9,19 @@ import {
   FontAwesome5,
   MaterialIcons,
 } from "@expo/vector-icons";
+import get from 'lodash/get'
 
 import CustomListItem from "../components/CustomListItem";
 import { COLORS } from "../assets/constants";
 
-import styles from "./HomeScreenStyles";
 import {
-  selectTransactionList,
+  selectTransactionDetails,
   getTransactionList,
-  setErrorMessage,
-  selectErrorMessage,
 } from "../slice/HomeScreen.slice";
 
-const HeaderLogo = () => {
+import styles from "./HomeScreenStyles";
 
+const HeaderLogo = () => {
   const logo = require("../assets/logo.png");
   return (
     <Image
@@ -37,11 +36,10 @@ const HeaderLogo = () => {
 };
 
 const HomeScreen = ({ navigation }) => {
-
   const dispatch = useDispatch();
+  const transactionsDetails = useSelector(selectTransactionDetails)
 
   useEffect(() => {
-    console.log("getTransactionList");
     dispatch(getTransactionList());
   }, [dispatch]);
 
@@ -58,74 +56,7 @@ const HomeScreen = ({ navigation }) => {
     });
   }, [navigation]);
 
-  // transactions
-  const [transactions, setTransactions] = useState([
-    {
-      id: 1,
-      transactionMadeOn: "2022-03-24",
-      transactionAmount: 40,
-      transactionType: "debit",
-      categoryName: "Food",
-      source: "**9746",
-      currency: "INR",
-      description: null,
-      transactionMode: "UPI",
-    },
-    {
-      id: 2,
-      transactionMadeOn: "2022-03-24",
-      transactionAmount: 100,
-      transactionType: "debit",
-      categoryName: "Home",
-      source: null,
-      currency: "INR",
-      description: null,
-      transactionMode: "Debit Card",
-    },
-    {
-      id: 6,
-      transactionMadeOn: "2022-03-24",
-      transactionAmount: 1000,
-      transactionType: "credit",
-      categoryName: "Home",
-      source: null,
-      currency: "INR",
-      description: null,
-      transactionMode: "Debit Card",
-    },
-  ]);
-
-  // stuff
-  const [totalIncome, setTotalIncome] = useState([]);
-  const [income, setIncome] = useState(0);
-  const [totalExpense, setTotalExpense] = useState([]);
-  const [expense, setExpense] = useState(0);
-  const [totalBalance, setTotalBalance] = useState(0);
-
-  useEffect(() => {
-    if (totalIncome) {
-      if (totalIncome?.length == 0) {
-        setIncome(0);
-      } else {
-        setIncome(totalIncome?.reduce((a, b) => Number(a) + Number(b), 0));
-      }
-    }
-    if (totalExpense) {
-      if (totalExpense?.length == 0) {
-        setExpense(0);
-      } else {
-        setExpense(totalExpense?.reduce((a, b) => Number(a) + Number(b), 0));
-      }
-    }
-  }, [totalIncome, totalExpense, income, expense]);
-
-  useEffect(() => {
-    if (income || expense) {
-      setTotalBalance(income - expense);
-    } else {
-      setTotalBalance(0);
-    }
-  }, [totalIncome, totalExpense, income, expense]);
+  const totalBalance = get(transactionsDetails, 'monthIncome', 0) - get(transactionsDetails, 'monthExpenses', 0)
 
   return (
     <>
@@ -165,7 +96,7 @@ const HomeScreen = ({ navigation }) => {
                 </Text>
               </View>
               <Text h4 style={{ textAlign: "center" }}>
-                {`₹ ${income?.toFixed(2)}`}
+                {`₹ ${get(transactionsDetails, 'monthIncome', 0)?.toFixed(2)}`}
               </Text>
             </View>
             <View>
@@ -176,7 +107,7 @@ const HomeScreen = ({ navigation }) => {
                 </Text>
               </View>
               <Text h4 style={{ textAlign: "center" }}>
-                {`₹ ${expense?.toFixed(2)}`}
+                {`₹ ${get(transactionsDetails, 'monthExpenses', 0)?.toFixed(2)}`}
               </Text>
             </View>
           </View>
@@ -194,9 +125,9 @@ const HomeScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        {transactions?.length > 0 ? (
+        {get(transactionsDetails, 'list', [])?.length > 0 ? (
           <View style={styles.recentTransactions}>
-            {transactions?.slice(0, 3).map((info) => (
+            {get(transactionsDetails, 'list', [])?.slice(0, 3).map((info) => (
               <View key={info.id}>
                 <CustomListItem
                   info={info}
