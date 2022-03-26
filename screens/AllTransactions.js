@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomListItem from '../components/CustomListItem'
@@ -14,19 +14,42 @@ const AllTransactions = ({ navigation }) => {
     })
   }, [])
 
-  const [transactions, setTransactions] = useState([])
+  const [transactions, setTransactions] = useState([
+    {
+      "id": 1,
+      "transactionMadeOn": "2022-03-24",
+      "transactionAmount": 40,
+      "transactionType": "debit",
+      "categoryName": "Food",
+      "source": "**9746",
+      "currency": "INR",
+      "description": null,
+      "transactionMode": "UPI"
+    },
+    {
+      "id": 2,
+      "transactionMadeOn": "2022-03-24",
+      "transactionAmount": 100,
+      "transactionType": "debit",
+      "categoryName": "Home",
+      "source": null,
+      "currency": "INR",
+      "description": null,
+      "transactionMode": "Debit Card"
+    }
+  ])
 
-  const [filter, setFilter] = useState([])
+
 
   return (
     <>
-      {filter?.length > 0 ? (
+      {transactions?.length > 0 ? (
         <SafeAreaView style={styles.container}>
           <ScrollView>
-            {filter?.map((info) => (
+            {transactions?.map((info) => (
               <View key={info.id}>
                 <CustomListItem
-                  info={info.data}
+                  info={info}
                   navigation={navigation}
                   id={info.id}
                 />

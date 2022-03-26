@@ -1,22 +1,41 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { View, TouchableOpacity } from 'react-native'
-import { Text } from 'react-native-elements'
+import { Text, Image } from 'react-native-elements'
 import { StatusBar } from 'expo-status-bar'
-import { AntDesign, Feather, FontAwesome5 } from '@expo/vector-icons'
+import { AntDesign, Feather, FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 
 import CustomListItem from '../components/CustomListItem'
 import { COLORS } from '../assets/constants'
 
 import styles from './HomeScreenStyles'
 
+const HeaderLogo = () => {
+  const logo = require("../assets/logo.png");
+  return (
+    <Image
+      style={{
+        resizeMode: "contain",
+        height: 40,
+        width: 85,
+      }}
+      source={logo}
+    />
+  )
+}
+
 const HomeScreen = ({ navigation }) => {
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: 'Expense Tracker',
+      headerTitle: (
+        <HeaderLogo />
+      ),
       headerRight: () => (
         <View style={{ marginRight: 20 }}>
           <TouchableOpacity activeOpacity={0.5} onPress={() => { }}>
-            <Text style={{ fontWeight: 'bold' }}>Logout</Text>
+            <MaterialIcons
+              name="logout"
+              size={24}
+            />
           </TouchableOpacity>
         </View>
       ),
@@ -26,42 +45,39 @@ const HomeScreen = ({ navigation }) => {
   // transactions
   const [transactions, setTransactions] = useState([
     {
-      id: 1,
-      referenceId: 10000,
+      "id": 1,
+      "transactionMadeOn": "2022-03-24",
+      "transactionAmount": 40,
+      "transactionType": "debit",
+      "categoryName": "Food",
+      "source": "**9746",
+      "currency": "INR",
+      "description": null,
+      "transactionMode": "UPI"
+    },
+    {
+      "id": 2,
+      "transactionMadeOn": "2022-03-24",
+      "transactionAmount": 100,
+      "transactionType": "debit",
+      "categoryName": "Home",
+      "source": null,
+      "currency": "INR",
+      "description": null,
+      "transactionMode": "Debit Card"
+    },
+    {
+      "id": 6,
+      "transactionMadeOn": "2022-03-24",
+      "transactionAmount": 1000,
+      "transactionType": "credit",
+      "categoryName": "Home",
+      "source": null,
+      "currency": "INR",
+      "description": null,
+      "transactionMode": "Debit Card"
     }
   ])
-  // useEffect(() => {
-  //   const unsubscribe = db
-  //     .collection('expense')
-  //     .orderBy('timestamp', 'desc')
-  //     .onSnapshot(
-  //       (snapshot) =>
-  //         setTransactions(
-  //           snapshot.docs.map((doc) => ({
-  //             id: doc.id,
-  //             data: doc.data(),
-  //           }))
-  //         ) &
-  //         setTotalIncome(
-  //           snapshot.docs.map((doc) =>
-  //             doc.data()?.email === auth.currentUser.email &&
-  //               doc.data()?.type == 'income'
-  //               ? doc.data().price
-  //               : 0
-  //           )
-  //         ) &
-  //         setTotalExpense(
-  //           snapshot.docs.map((doc) =>
-  //             doc.data()?.email === auth.currentUser.email &&
-  //               doc.data()?.type == 'expense'
-  //               ? doc.data().price
-  //               : 0
-  //           )
-  //         )
-  //     )
-
-  //   return unsubscribe
-  // }, [])
 
   // stuff
   const [totalIncome, setTotalIncome] = useState([])
@@ -94,8 +110,6 @@ const HomeScreen = ({ navigation }) => {
       setTotalBalance(0)
     }
   }, [totalIncome, totalExpense, income, expense])
-
-  const [filter, setFilter] = useState([])
 
   return (
     <>
@@ -161,12 +175,12 @@ const HomeScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        {filter?.length > 0 ? (
+        {transactions?.length > 0 ? (
           <View style={styles.recentTransactions}>
-            {filter?.slice(0, 3).map((info) => (
+            {transactions?.slice(0, 3).map((info) => (
               <View key={info.id}>
                 <CustomListItem
-                  info={info.data}
+                  info={info}
                   navigation={navigation}
                   id={info.id}
                 />

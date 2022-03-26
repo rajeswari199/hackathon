@@ -1,80 +1,70 @@
 import React, { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
 import { ListItem, Text, Divider } from 'react-native-elements'
 import { MaterialIcons } from '@expo/vector-icons'
+import get from 'lodash/get'
+
 import ModalActions from './ModalActions'
 
-const CustomListItem = ({ info, navigation, id }) => {
+import { categoriesList, otherIcon } from '../utils/constants'
+import { COLORS } from '../assets/constants'
+
+import { getAmountDetails } from './service'
+
+import styles from './CustomListItemStyles'
+
+const CustomListItem = ({ info, navigation }) => {
   const [modalVisible, setModalVisible] = useState(false)
+
+  const categoryDetails = categoriesList.find(item => item.name === info.categoryName)
 
   return (
     <>
       <View>
-        <ListItem onPress={() => setModalVisible(true)}>
-          {info.type === 'expense' ? (
-            <View style={styles.left}>
-              <MaterialIcons name='money-off' size={24} color='white' />
-            </View>
-          ) : (
-            <View style={styles.income}>
-              <MaterialIcons name='attach-money' size={24} color='white' />
-            </View>
-          )}
+        <ListItem
+          onPress={() => {
+            console.log('pressed')
+            setModalVisible(true)
+          }}
+        >
+          <View style={styles.left}>
+            <MaterialIcons
+              name={get(categoryDetails, 'icon', otherIcon)}
+              size={24}
+              color={COLORS.primaryColor}
+            />
+          </View>
+
           <ListItem.Content>
             <ListItem.Title
               style={{ fontWeight: 'bold', textTransform: 'capitalize' }}
             >
-              {info?.text}
+              {info?.transactionMode}
             </ListItem.Title>
             <ListItem.Subtitle>
-              {/* {new Date(info?.timestamp?.toDate()).toUTCString()} */}
-              {info?.userDate}
+              {info?.transactionMadeOn}
             </ListItem.Subtitle>
           </ListItem.Content>
+
           <View>
-            {info.type === 'expense' ? (
-              <Text style={styles.right}>
-                $ -{Number(info?.price)?.toFixed(2)}
-              </Text>
-            ) : (
-              <Text style={styles.rightIncome}>
-                $ {Number(info?.price)?.toFixed(2)}
-              </Text>
-            )}
+
+            <Text style={getAmountDetails(info).style}>
+              {getAmountDetails(info).symbol}{getAmountDetails(info).amount}
+            </Text>
           </View>
         </ListItem>
+
         <Divider style={{ backgroundColor: 'lightgrey' }} />
-      </View>
+      </View >
+
       <ModalActions
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         navigation={navigation}
-        id={id}
+        info={info}
       />
     </>
   )
 }
 
 export default CustomListItem
-
-const styles = StyleSheet.create({
-  left: {
-    backgroundColor: '#533461',
-    borderRadius: 8,
-    padding: 10,
-  },
-
-  income: {
-    backgroundColor: '#61ACB8',
-    borderRadius: 8,
-    padding: 10,
-  },
-  right: {
-    fontWeight: 'bold',
-    color: 'red',
-  },
-  rightIncome: {
-    fontWeight: 'bold',
-    color: 'green',
-  },
-})

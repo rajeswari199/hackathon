@@ -17,7 +17,7 @@ const Stack = createStackNavigator();
 export default function App() {
   const globalScreenOptions = {
     headerStyle: {
-      backgroundColor: COLORS.mainColor,
+      backgroundColor: COLORS.mainOpacityColor,
       opacity: 0.8,
     },
     headerTintColor: COLORS.secondaryColor,
