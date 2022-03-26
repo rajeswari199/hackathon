@@ -1,5 +1,6 @@
 export const COLORS = {
-  mainColor: '#f4982a',
+  mainColor: '#FF8565',
+  mainOpacityColor: '#FFC29C',
   primaryColor: 'white',
   secondaryColor: 'black',
   green: 'green',
